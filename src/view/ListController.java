@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -85,28 +87,33 @@ public class ListController {
 		String newYear = selectYear.getText();
 		
 		//leave blank for alert empty input later!!!!!!!!!!!!
-		//
-		//
-		//
-		//
-		//
-		
-		for(Song s : song) {
-			if(s.songArtist.equals(artistName) &&
-					s.songName.equals(songName)) {
-				//edit song
-				s.songName = newName;
-				s.songArtist = newArtist;
-				s.songAlbum = newAlbum;
-				s.songYear = newYear;
-				break;
-			}
+		if(newName.isEmpty() ||
+				newArtist.isEmpty()) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Warning");
+			alert.setHeaderText("Name and Field Must be Populated!");
+			String content = "Send by: Tongle Yao and Soo Park";
+			alert.setContentText(content);
+			alert.show();
 		}
-		
-		//reload listview
-		String newTitle = newName + "-" + newArtist;
-		obsList.set(index, newTitle);
-		listView.setItems(obsList);
+		else {
+			for(Song s : song) {
+				if(s.songArtist.equals(artistName) &&
+						s.songName.equals(songName)) {
+					//edit song
+					s.songName = newName;
+					s.songArtist = newArtist;
+					s.songAlbum = newAlbum;
+					s.songYear = newYear;
+					break;
+				}
+			}
+			
+			//reload listview
+			String newTitle = newName + "-" + newArtist;
+			obsList.set(index, newTitle);
+			listView.setItems(obsList);
+		}
 	}
 	
 	public void revertOverWrite(ActionEvent e) {
