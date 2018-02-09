@@ -78,8 +78,8 @@
          </rowConstraints>
       </GridPane>
       <Text layoutX="831.0" layoutY="526.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add New Song" underline="true" wrappingWidth="170.0" />
-      <Button fx:id="saveOverwrite" layoutX="678.0" layoutY="386.0" mnemonicParsing="false" text="Save Overwrite Edits" />
-      <Button fx:id="revertOverwrite" layoutX="941.0" layoutY="386.0" mnemonicParsing="false" text="Revert Overwrites" />
+      <Button fx:id="saveOverwrite" onAction="#saveOverWrite" layoutX="678.0" layoutY="386.0" mnemonicParsing="false" text="Save Overwrite Edits" />
+      <Button fx:id="revertOverwrite" onAction="#revertOverWrite" layoutX="941.0" layoutY="386.0" mnemonicParsing="false" text="Revert Overwrites" />
       <Button fx:id="saveSong" layoutX="733.0" layoutY="747.0" mnemonicParsing="false" text="Save New Song" />
       <Button fx:id="addClear" layoutX="966.0" layoutY="747.0" mnemonicParsing="false" text="Clear" />
    </children>

@@ -1,95 +1,130 @@
 package view;
 
-import java.util.Optional;
-
+import java.lang.Object;
+import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class ListController {
-	@FXML         
-	ListView<String> listView;                
-
+	@FXML ListView<String> listView;                
+	@FXML TextField selectArtist;
+	@FXML TextField selectName;
+	@FXML TextField selectYear;
+	@FXML TextField selectAlbum;
+	
+	ArrayList<Song> song;
 	private ObservableList<String> obsList;              
 
-	public void start(Stage mainStage) {                
-		// create an ObservableList 
-		// from an ArrayList              
-		obsList = FXCollections.observableArrayList(                               
-				"Giants",                               
-				"Patriots",
-				"49ers",
-				"Rams",
-				"Packers",
-				"Colts",
-				"Cowboys",
-				"Broncos",
-				"Vikings",
-				"Dolphins",
-				"Titans",
-				"Seahawks",
-				"Steelers",
-				"Jaguars");               
-		listView.setItems(obsList); 
+	public void start(Stage mainStage) {
+		song = new ArrayList<Song>();
+		obsList = FXCollections.observableArrayList();
 		
-		// select the first item
-		listView.getSelectionModel().select(0);
+		//fake data
+		Song s1 = new Song ("good", "tongle", "1997", "great");
+		Song s2 = new Song ("bad", "park");
+		song.add(s1);
+		song.add(s2);
 		
-		// make listview editable
-		listView.setCellFactory(TextFieldListCell.forListView());  
-		listView.setEditable(true);
+		//access song name and artist
+		for(int counter = 0; counter < song.size(); ++counter) {
+			Song currSong = song.get(counter);
+			String listShow = currSong.songName + "-" + currSong.songArtist;
 			
-		
-		listView.getItems().add("some new element");
-		
-		// set listener for the items
+			obsList.add(listShow);
+		}
+        
+		//set listener for show song information
 		listView
 		.getSelectionModel()
 		.selectedIndexProperty()
 		.addListener(
-				(obs, oldVal, newVal) -> 
-				//showItem(mainStage)
-				showItemInputDialog(mainStage)
+				(obs, oldVal, newVal) ->
+				showInfo(mainStage)
 				);
-				
+		listView.setItems(obsList);
 	}
 	
-	public void showItem(Stage mainStage) {                
-		Alert alert = 
-				new Alert(AlertType.INFORMATION);
-		alert.initOwner(mainStage);
-		alert.setTitle("List Item");
-		alert.setHeaderText(
-				"Selected list item properties");
-
-		String content = "Index: " + 
-				listView.getSelectionModel()
-		.getSelectedIndex() + 
-		"\nValue: " + 
-		listView.getSelectionModel()
-		.getSelectedItem();
-
-		alert.setContentText(content);
-		alert.show();
-
+	public void showInfo(Stage mainStage) {
+		String item = listView.getSelectionModel().getSelectedItem();
+		String songName = item.substring(0, item.lastIndexOf('-'));
+		String artistName = item.substring(item.lastIndexOf('-') + 1, item.length());
+		
+		for(Song s : song) {
+			if(s.songArtist.equals(artistName) &&
+					s.songName.equals(songName)) {
+				//show target song information in textField
+				selectName.setText(s.songName);
+				selectArtist.setText(s.songArtist);
+				selectAlbum.setText(s.songAlbum);
+				selectYear.setText(s.songYear);
+				break;
+			}
+		}
 	}
-
-	public void showItemInputDialog(Stage mainStage) {                
+	
+	public void saveOverWrite(ActionEvent e) {
+		//access current selection
 		String item = listView.getSelectionModel().getSelectedItem();
 		int index = listView.getSelectionModel().getSelectedIndex();
-
-		TextInputDialog dialog = new TextInputDialog(item);
-		dialog.initOwner(mainStage); dialog.setTitle("List Item");
-		dialog.setHeaderText("Selected Item (Index: " + index + ")");
-		dialog.setContentText("Enter name: ");
-
-		Optional<String> result = dialog.showAndWait();
-		if (result.isPresent()) { obsList.set(index, result.get()); }
-	}	
+		String songName = item.substring(0, item.lastIndexOf('-'));
+		String artistName = item.substring(item.lastIndexOf('-') + 1, item.length());
+		
+		Button overWrite = (Button)e.getSource();
+		
+		//access user input
+		String newName = selectName.getText();
+		String newArtist = selectArtist.getText();
+		String newAlbum = selectAlbum.getText();
+		String newYear = selectYear.getText();
+		
+		//leave blank for alert empty input later!!!!!!!!!!!!
+		//
+		//
+		//
+		//
+		//
+		
+		for(Song s : song) {
+			if(s.songArtist.equals(artistName) &&
+					s.songName.equals(songName)) {
+				//edit song
+				s.songName = newName;
+				s.songArtist = newArtist;
+				s.songAlbum = newAlbum;
+				s.songYear = newYear;
+				break;
+			}
+		}
+		
+		//reload listview
+		String newTitle = newName + "-" + newArtist;
+		obsList.set(index, newTitle);
+		listView.setItems(obsList);
+	}
+	
+	public void revertOverWrite(ActionEvent e) {
+		int index = listView.getSelectionModel().getSelectedIndex();
+		String item = listView.getSelectionModel().getSelectedItem();
+		String songName = item.substring(0, item.lastIndexOf('-'));
+		String artistName = item.substring(item.lastIndexOf('-') + 1, item.length());
+		
+		for(Song s : song) {
+			if(s.songArtist.equals(artistName) &&
+					s.songName.equals(songName)) {
+				//show target song information in textField
+				selectName.setText(s.songName);
+				selectArtist.setText(s.songArtist);
+				selectAlbum.setText(s.songAlbum);
+				selectYear.setText(s.songYear);
+				break;
+			}
+		}
+	}
 }
