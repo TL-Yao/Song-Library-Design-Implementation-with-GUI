@@ -16,8 +16,9 @@ public class ListApp extends Application {
 	throws IOException {
 		FXMLLoader loader = new FXMLLoader();   
 		loader.setLocation(
-		getClass().getResource("/view/Song.fxml"));
+				getClass().getResource("/view/List.fxml"));
 		AnchorPane root = (AnchorPane)loader.load();
+
 
 		ListController listController = loader.getController();
 		listController.start(primaryStage);
