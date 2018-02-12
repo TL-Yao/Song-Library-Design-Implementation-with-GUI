@@ -1,7 +1,8 @@
 package view;
 
-import java.lang.Object;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -30,9 +30,11 @@ public class ListController {
 		
 		//fake data
 		Song s1 = new Song ("good", "tongle", "1997", "great");
-		Song s2 = new Song ("bad", "park");
+		Song s2 = new Song ("cwdnt", "park");
+		Song s3 = new Song ("C want an A", "CS213");
 		song.add(s1);
 		song.add(s2);
+		song.add(s3);
 		
 		//access song name and artist
 		for(int counter = 0; counter < song.size(); ++counter) {
@@ -41,7 +43,11 @@ public class ListController {
 			
 			obsList.add(listShow);
 		}
-        
+		
+		//Sorting observable list, case insensitive
+		Comparator<String> comparator = Comparator.comparing(String::toString,String.CASE_INSENSITIVE_ORDER);
+		FXCollections.sort(obsList, comparator);
+		
 		//set listener for show song information
 		listView
 		.getSelectionModel()
@@ -52,6 +58,8 @@ public class ListController {
 				);
 		listView.setItems(obsList);
 	}
+	
+
 	
 	public void showInfo(Stage mainStage) {
 		String item = listView.getSelectionModel().getSelectedItem();
@@ -112,6 +120,10 @@ public class ListController {
 			//reload listview
 			String newTitle = newName + "-" + newArtist;
 			obsList.set(index, newTitle);
+			
+			//sorting new list
+			Comparator<String> comparator = Comparator.comparing(String::toString,String.CASE_INSENSITIVE_ORDER);
+			FXCollections.sort(obsList, comparator);
 			listView.setItems(obsList);
 		}
 	}
