@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.ListView?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="854.0" prefWidth="1243.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ListController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="807.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ListController">
    <children>
-      <ListView fx:id="listView" layoutX="14.0" layoutY="126.0" prefHeight="649.0" prefWidth="556.0" />
-      <MenuBar layoutX="14.0" layoutY="65.0" prefHeight="51.0" prefWidth="1218.0">
+      <ListView fx:id="listView" layoutX="14.0" layoutY="126.0" prefHeight="344.0" prefWidth="370.0" />
+      <MenuBar layoutX="14.0" layoutY="65.0" prefHeight="51.0" prefWidth="772.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -26,9 +26,9 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Button fx:id="delete" layoutX="14.0" layoutY="789.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="556.0" text="Delete Selected Song" />
-      <Text layoutX="797.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Song Details" underline="true" wrappingWidth="237.0" />
-      <GridPane gridLinesVisible="true" layoutX="693.0" layoutY="180.0" prefHeight="184.0" prefWidth="445.0">
+      <Button fx:id="delete" onAction="#deleteSong" layoutX="57.0" layoutY="484.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="285.0" text="Delete Selected Song" />
+      <Text layoutX="549.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Song Details" underline="true" wrappingWidth="237.0" />
+      <GridPane gridLinesVisible="true" layoutX="436.0" layoutY="164.0" prefHeight="134.0" prefWidth="336.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="96.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="269.0" />
@@ -55,7 +55,7 @@
             <Font size="36.0" />
          </font>
       </Text>
-      <GridPane gridLinesVisible="true" layoutX="693.0" layoutY="546.0" prefHeight="184.0" prefWidth="445.0">
+      <GridPane gridLinesVisible="true" layoutX="432.0" layoutY="397.0" prefHeight="134.0" prefWidth="336.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Artist" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
@@ -77,10 +77,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <Text layoutX="831.0" layoutY="526.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add New Song" underline="true" wrappingWidth="170.0" />
-      <Button fx:id="saveOverwrite" onAction="#saveOverWrite" layoutX="678.0" layoutY="386.0" mnemonicParsing="false" text="Save Overwrite Edits" />
-      <Button fx:id="revertOverwrite" onAction="#revertOverWrite" layoutX="941.0" layoutY="386.0" mnemonicParsing="false" text="Revert Overwrites" />
-      <Button fx:id="saveSong" layoutX="733.0" layoutY="747.0" mnemonicParsing="false" text="Save New Song" />
-      <Button fx:id="addClear" layoutX="966.0" layoutY="747.0" mnemonicParsing="false" text="Clear" />
+      <Text layoutX="571.0" layoutY="386.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add New Song" underline="true" wrappingWidth="170.0" />
+      <Button fx:id="saveOverwrite" layoutX="436.0" layoutY="309.0" mnemonicParsing="false" onAction="#saveOverWrite" prefHeight="51.0" prefWidth="151.0" text="Save Overwrite Edits" />
+      <Button fx:id="revertOverwrite" layoutX="594.0" layoutY="309.0" mnemonicParsing="false" onAction="#revertOverWrite" prefHeight="51.0" prefWidth="119.0" text="Revert Overwrites" />
+      <Button fx:id="saveSong" layoutX="458.0" layoutY="543.0" mnemonicParsing="false" onAction="#addSong" prefHeight="51.0" prefWidth="119.0" text="Save New Song" />
+      <Button fx:id="addClear" layoutX="584.0" layoutY="543.0" mnemonicParsing="false" onAction="#addClear" prefHeight="51.0" text="Clear" />
    </children>
 </AnchorPane>

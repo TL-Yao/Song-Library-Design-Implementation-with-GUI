@@ -64,6 +64,7 @@ public class ListController {
 		String songName = item.substring(0, item.lastIndexOf('-'));
 		String artistName = item.substring(item.lastIndexOf('-') + 1, item.length());
 		
+		
 		for(Song s : song) {
 			if(s.songArtist.equals(artistName) &&
 					s.songName.equals(songName)) {
