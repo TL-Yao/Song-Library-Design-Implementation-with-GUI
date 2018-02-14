@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -38,7 +40,7 @@ public class ListController {
 		obsList = FXCollections.observableArrayList();
 		
 		load();
-		
+		listView.getSelectionModel().select(0);
 		//set listener for show song information
 		listView
 		.getSelectionModel()
@@ -48,8 +50,21 @@ public class ListController {
 				showInfo(mainStage)
 				);
 		listView.setItems(obsList);
+	}
+	
+	public boolean isBlank (String str) {
+		if(str == null) {
+			return false;
+		}
 		
-		listView.getSelectionModel().select(0);
+		String s = str.trim();
+		
+		if(s.equals("")) {
+			return false;
+		}else{
+			return true;
+		}
+		
 	}
 	
 	public void showInfo(Stage mainStage) {
@@ -94,81 +109,106 @@ public class ListController {
 		String songName = item.substring(0, item.lastIndexOf('-'));
 		String artistName = item.substring(item.lastIndexOf('-') + 1, item.length());
 		
-		Button overWrite = (Button)e.getSource();
-		
-		//access user input
-		String newName = selectName.getText();
-		String newArtist = selectArtist.getText();
-		String newAlbum = selectAlbum.getText();
-		String newYear = selectYear.getText();
-		
-		if(newName.isEmpty() ||
-				newArtist.isEmpty()) {
-		//Name and Artist can not be empty 
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Warning");
-			alert.setHeaderText("Name and Field Must be Populated!");
-			String content = "Send by: Tongle Yao and Soo Park";
-			alert.setContentText(content);
-			alert.show();
-		}
-		else {
-			if(newYear != null) {
-				for(int pos = 0; pos < newYear.length(); ++pos) {
-					if(newYear.charAt(pos) < 48 ||
-							newYear.charAt(pos) > 57 ||
-							newYear.length() != 4 ||
-							Integer.parseInt(newYear) > 2018) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Warning");
-						alert.setHeaderText("Year must be between 1000 - 2018.");
-						String content = "Send by: Tongle Yao and Soo Park";
-						alert.setContentText(content);
-						alert.show();
-					 	return;
+		//user conformation
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Dialog");
+		alert.setHeaderText("Look, a Confirmation Dialog");
+		alert.setContentText("Are you ok with this?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+		    // ... user chose OK
+			//access user input
+			String newName = selectName.getText();
+			String newArtist = selectArtist.getText();
+			String newAlbum = selectAlbum.getText();
+			String newYear = selectYear.getText();
+			
+			if(newName.isEmpty() ||
+					newArtist.isEmpty() ||
+					newName.trim().isEmpty() ||
+					newArtist.trim().isEmpty()) {
+				
+				//Name and Artist can not be empty 
+				Alert alert2 = new Alert(AlertType.INFORMATION);
+				alert2.setTitle("Warning");
+				alert2.setHeaderText("Name and Field Must be Populated!");
+				String content = "Send by: Tongle Yao and Soo Park";
+				alert2.setContentText(content);
+				alert2.show();
+			}
+			else {
+				if(newYear != null) {
+					newYear = newYear.trim();
+					
+					if(!newYear.equals("")) {
+						//newYear is  not whitespace
+						for(int pos = 0; pos < newYear.length(); ++pos) {
+							if(newYear.charAt(pos) < 48 ||
+									newYear.charAt(pos) > 57 ||
+									newYear.length() != 4 ||
+									Integer.parseInt(newYear) > 2018) {
+								//check if user input valid year
+								Alert alert3 = new Alert(AlertType.INFORMATION);
+								alert3.setTitle("Warning");
+								alert3.setHeaderText("Year must be between 1000 - 2018.");
+								String content = "Send by: Tongle Yao and Soo Park";
+								alert3.setContentText(content);
+								alert3.show();
+							 	return;
+							}
+						}
 					}
 				}
-			}
-			
-			//Check if Exists
-			for(int counter = 0; counter < song.size(); ++counter) {
-				Song currSong = song.get(counter);
-				if(currSong.songName.equals(newName) && 
-						currSong.songArtist.equals(newArtist) &&
-						!currSong.songName.equals(songName) &&
-						!currSong.songArtist.equals(artistName)) {
-					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Warning");
-					alert.setHeaderText("Song already exists in the database!");
-					String content = "Send by: Tongle Yao and Soo Park";
-					alert.setContentText(content);
-					alert.show();
-					return;
+				
+				//Check if the item already exists
+				for(int counter = 0; counter < song.size(); ++counter) {
+					Song currSong = song.get(counter);
+					if(currSong.songName.equals(newName) && 
+							currSong.songArtist.equals(newArtist) &&
+							!currSong.songName.equals(songName) &&
+							!currSong.songArtist.equals(artistName)) {
+
+						Alert alert1 = new Alert(AlertType.INFORMATION);
+						alert1.setTitle("Warning");
+						alert1.setHeaderText("Song already exists in the database!");
+						String content = "Send by: Tongle Yao and Soo Park";
+						alert1.setContentText(content);
+						alert1.show();
+						return;
+					}
 				}
-			}
-			
-			for(Song s : song) {
-				if(s.songArtist.equals(artistName) &&
-						s.songName.equals(songName)) {
-					//find target song and edit it
-					s.songName = newName;
-					s.songArtist = newArtist;
-					s.songAlbum = newAlbum;
-					s.songYear = newYear;
-					break;
+				
+				newName = newName.trim();
+				newArtist = newArtist.trim();
+				if(newAlbum != null) { newAlbum = newAlbum.trim(); }
+				
+				for(Song s : song) {
+					if(s.songArtist.equals(artistName) &&
+							s.songName.equals(songName)) {
+						//find target song and edit it
+						s.songName = newName;
+						s.songArtist = newArtist;
+						s.songAlbum = newAlbum;
+						s.songYear = newYear;
+						break;
+					}
 				}
+				
+				//reload listview
+				String newTitle = newName + "-" + newArtist;
+				obsList.set(index, newTitle);
+				
+				//sorting new list
+				Comparator<String> comparator = Comparator.comparing(String::toString,String.CASE_INSENSITIVE_ORDER);
+				FXCollections.sort(obsList, comparator);
+				listView.setItems(obsList);
 			}
-			
-			//reload listview
-			String newTitle = newName + "-" + newArtist;
-			obsList.set(index, newTitle);
-			
-			//sorting new list
-			Comparator<String> comparator = Comparator.comparing(String::toString,String.CASE_INSENSITIVE_ORDER);
-			FXCollections.sort(obsList, comparator);
-			listView.setItems(obsList);
+		} else {
+		    return;
 		}
+		
+		
 	}
 	
 	public void revertOverWrite(ActionEvent e) {
@@ -310,6 +350,14 @@ public class ListController {
 		//Remove song from ObsList
 		obsList.remove(index);
 		listView.setItems(obsList.sorted());
+		
+		//pre-select the previous one
+		if(index != 0) {
+			listView.getSelectionModel().select(index - 1);	
+		}
+		else {
+			listView.getSelectionModel().select(index);	
+		}
 		
 		//Revert to empty show details
 		selectName.setText("");
